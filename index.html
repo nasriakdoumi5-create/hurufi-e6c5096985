@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>حروفي</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon192.png">
+<link rel="apple-touch-icon" href="icon192.png">
+<meta name="theme-color" content="#ff8a3d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{--bg:#fff8ec;--ink:#3b2a1a;--a:#ff8a3d;--b:#3db5ff;--g:#4cc46b;--card:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,sans-serif;touch-action:manipulation}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--a);color:#fff}
+header h1{margin:0;font-size:24px}
+#stars{font-size:22px;font-weight:700}
+nav{display:flex;gap:8px;padding:10px 16px;justify-content:center}
+nav button{flex:1;max-width:160px;padding:12px;font-size:18px;border:0;border-radius:14px;background:#ffe2c8;color:var(--ink);font-weight:700}
+nav button.on{background:var(--b);color:#fff}
+main{max-width:560px;margin:0 auto;padding:8px 16px 40px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.grid button{aspect-ratio:1;font-size:40px;border:0;border-radius:16px;background:var(--card);box-shadow:0 3px 0 #e8d3b8;color:var(--ink)}
+.grid button.done{background:#dff5e4}
+.big{text-align:center}
+.big .l{font-size:140px;line-height:1.1}
+.big .w{font-size:30px;margin:6px 0}
+.big .e{font-size:70px}
+.row{display:flex;gap:10px;justify-content:center;margin:14px 0;flex-wrap:wrap}
+.btn{padding:14px 20px;font-size:20px;border:0;border-radius:14px;background:var(--b);color:#fff;font-weight:700}
+.btn.g{background:var(--g)}.btn.o{background:var(--a)}
+canvas{width:100%;aspect-ratio:1;background:#fff;border-radius:20px;box-shadow:0 3px 0 #e8d3b8;touch-action:none;display:block}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.opts button{font-size:70px;padding:10px;border:0;border-radius:18px;background:var(--card);box-shadow:0 3px 0 #e8d3b8;color:var(--ink)}
+.opts button.ok{background:#bdf0c9}.opts button.no{background:#ffc9c9}
+#msg{text-align:center;font-size:26px;min-height:36px;font-weight:700}
+.hid{display:none!important}
+#bar{position:relative;max-width:528px;margin:0 auto 6px;height:22px;background:#ffe2c8;border-radius:11px;overflow:hidden}
+#fill{height:100%;background:var(--g);width:0;transition:width .4s}
+#prog{position:absolute;inset:0;text-align:center;font-size:14px;font-weight:700;line-height:22px}
+#novoice{max-width:528px;margin:0 auto 6px;padding:8px;background:#ffe9a8;border-radius:10px;text-align:center;font-size:15px}
+.forms{display:flex;justify-content:center;gap:10px;margin:8px 0}
+.forms div{background:#fff;border-radius:12px;padding:4px 12px;box-shadow:0 2px 0 #e8d3b8;text-align:center}
+.forms b{display:block;font-size:44px;font-weight:400}.forms small{font-size:13px}
+.nav2{display:flex;align-items:center;justify-content:space-between}
+.arr{width:84px;height:84px;border:0;border-radius:50%;background:var(--a);color:#fff;font-size:48px;font-weight:700;box-shadow:0 4px 0 #d96a1f;animation:pulse 1.4s infinite}
+#pv{background:#ffe2c8;color:var(--ink);box-shadow:0 4px 0 #e8d3b8;animation:none}
+@keyframes pulse{50%{transform:scale(1.1)}}
+.big .e,.pic{display:inline-block;cursor:pointer}
+.big .e:not(:has(img)),.pic:not(:has(img)){animation:hop 1.6s ease-in-out infinite}
+.pic{display:block}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-18px) rotate(-8deg)}50%{transform:translateY(0) rotate(0)}75%{transform:translateY(-8px) rotate(8deg)}}
+.spin{animation:spin .7s ease-out!important}
+@keyframes spin{0%{transform:scale(1)}40%{transform:scale(1.5) rotate(20deg)}100%{transform:scale(1) rotate(360deg)}}
+.big .l{animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+#topics{display:flex;gap:8px;padding:10px 16px 0;justify-content:center}
+#topics button{flex:1;max-width:160px;padding:10px;font-size:20px;border:0;border-radius:14px;background:#fff;box-shadow:0 3px 0 #e8d3b8;font-weight:700;color:var(--ink)}
+#topics button.on{background:var(--a);color:#fff;box-shadow:0 3px 0 #d96a1f}
+.dot{display:inline-block;width:.9em;height:.9em;border-radius:50%;border:3px solid #0002;vertical-align:middle}
+.cnt{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:330px;margin:0 auto}
+.cnt{flex-direction:column;align-items:center}.cnt img{width:48px;height:48px}
+.tens{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:330px}.ten{display:grid;grid-template-columns:repeat(5,12px);gap:3px;padding:4px;background:#ffe2c8;border-radius:6px}.ten i{width:12px;height:12px;border-radius:50%;background:#e53935}
+.ones{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;margin-top:6px}
+.grid.g10{grid-template-columns:repeat(10,1fr);gap:4px}.grid.g10 button{font-size:16px;border-radius:8px}
+.pic{font-size:120px;text-align:center}
+#party{position:fixed;inset:0;pointer-events:none;font-size:40px}
+#party span{position:absolute;animation:fall 1.2s ease-in forwards}
+@keyframes fall{to{transform:translateY(100vh) rotate(360deg);opacity:0}}
+</style>
+<script>
+// حماية: أيّ خطأ غير متوقَّع لا يوقف اللعبة؛ وتنبيه إن فُتحت من داخل ملف مضغوط
+window.addEventListener("error",e=>{console.warn(e.message);e.preventDefault&&e.preventDefault()});
+window.addEventListener("unhandledrejection",e=>e.preventDefault());
+if(location.protocol==="file:"&&/\/Temp\/|\.zip/i.test(decodeURI(location.href)))
+  document.addEventListener("DOMContentLoaded",()=>document.body.insertAdjacentHTML("afterbegin",'<div style="background:#c62828;color:#fff;padding:14px;text-align:center;font-size:18px;font-weight:700">⚠️ فكّ ضغط الملف أوّلاً (Extraer todo) ثمّ افتح index.html — وإلّا لن تعمل الصور والأصوات</div>'));
+</script>
+</head>
+<body>
+<header><h1>حروفي</h1><div id="stars">⭐ 0</div></header>
+<div id="topics"><button data-k="h" class="on">أ ب ت</button><button data-k="n">1 2 3</button><button data-k="c">🎨 ألوان</button></div>
+<nav>
+<button data-m="learn" class="on">تعلّم</button>
+<button data-m="trace">اكتب</button>
+<button data-m="quiz">العب</button>
+<button data-m="pic">الصور</button>
+</nav>
+<div id="bar"><div id="fill"></div><span id="prog"></span></div>
+<div id="novoice" class="hid">لا يوجد صوت عربي في هذا الجهاز — ثبّت «العربية» من إعدادات اللغة ليعمل النطق</div>
+<main>
+<section id="learn"></section>
+<section id="trace" class="hid">
+  <div id="msg"></div>
+  <canvas id="cv" width="600" height="600"></canvas>
+  <div class="row"><button class="btn o" id="clr">امسح</button><button class="btn g" id="chk">تحقّق</button><button class="btn" id="nxt">التالي</button></div>
+</section>
+<section id="quiz" class="hid">
+  <div id="qmsg" style="text-align:center;font-size:24px;font-weight:700">أين الحرف؟</div>
+  <div class="row"><button class="btn" id="rep">🔊 اسمع</button></div>
+  <div class="opts" id="opts"></div>
+</section>
+<section id="pic" class="hid">
+  <div id="ptitle" style="text-align:center;font-size:24px;font-weight:700">بأيّ حرف تبدأ؟</div>
+  <div class="pic" id="pe"></div>
+  <div class="opts" id="popts"></div>
+</section>
+<div id="party"></div>
+<p style="text-align:center;font-size:11px;opacity:.5;direction:ltr">Animated emoji: Google Noto Emoji, CC BY 4.0</p>
+</main>
+<script>
+// [حرف, اسمه, كلمة, إيموجي احتياطي, صورة متحرّكة Noto (CC BY 4.0) في anim/]
+let L=[["ا","أَلِف","أَسَد","🦁","1f981"],["ب","باء","بِطْريق","🐧","1f427"],["ت","تاء","تُفّاحَة","🍎","1f34e"],["ث","ثاء","ثَعْلَب","🦊","1f98a"],["ج","جيم","جَزَر","🥕","1f955"],["ح","حاء","حِصان","🐎","1f40e"],["خ","خاء","خُفّاش","🦇","1f987"],["د","دال","دُبّ","🐻","1f43b"],["ذ","ذال","ذِئْب","🐺","1f43a"],["ر","راء","راكون","🦝","1f99d"],["ز","زاي","زَهْرَة","🌷","1f337"],["س","سين","سَمَكَة","🐟","1f41f"],["ش","شين","شَمْس","🌞","1f31e"],["ص","صاد","صَقْر","🦅","1f985"],["ض","ضاد","ضِفْدَع","🐸","1f438"],["ط","طاء","طائِرَة","✈️","2708_fe0f"],["ظ","ظاء","ظَرْف","✉️",""],["ع","عَيْن","عِنَب","🍇","1f347"],["غ","غَيْن","غَيْمَة","☁️","2601_fe0f"],["ف","فاء","فَراشَة","🦋","1f98b"],["ق","قاف","قِطَّة","🐱","1f431"],["ك","كاف","كَلْب","🐕","1f415"],["ل","لام","لَيْمون","🍋","1f34b"],["م","ميم","مَوْجَة","🌊","1f30a"],["ن","نون","نَحْلَة","🐝","1f41d"],["ه","هاء","هَدِيَّة","🎁","1f381"],["و","واو","وَرْدَة","🌹","1f339"],["ي","ياء","يَد","✋","270b"]];
+const H=L;
+const AR="٠١٢٣٤٥٦٧٨٩";
+// الأرقام 1–100: الاسم، والرسم = عيدان عشرات + تفّاحات آحاد
+const U=["","واحِد","اِثْنان","ثَلاثَة","أَرْبَعَة","خَمْسَة","سِتَّة","سَبْعَة","ثَمانِيَة","تِسْعَة"];
+const T=["","عَشَرَة","عِشْرون","ثَلاثون","أَرْبَعون","خَمْسون","سِتّون","سَبْعون","ثَمانون","تِسْعون"];
+const TEEN=["عَشَرَة","أَحَدَ عَشَر","اِثْنا عَشَر","ثَلاثَةَ عَشَر","أَرْبَعَةَ عَشَر","خَمْسَةَ عَشَر","سِتَّةَ عَشَر","سَبْعَةَ عَشَر","ثَمانِيَةَ عَشَر","تِسْعَةَ عَشَر"];
+const nm=k=>k===100?"مِئَة":k<10?U[k]:k<20?TEEN[k-10]:k%10?U[k%10]+" وَ"+T[k/10|0]:T[k/10];
+const drawN=k=>{const t=k/10|0,o=k%10;
+  return '<span class="cnt">'+(t?'<span class="tens">'+Array(t).fill('<span class="ten">'+"<i></i>".repeat(10)+"</span>").join("")+"</span>":"")+
+  (o?'<span class="ones">'+Array(o).fill('<img src="anim/1f34e.webp" alt="" onerror="this.outerHTML=&quot;🍎&quot;">').join("")+"</span>":"")+"</span>"};
+const N=Array.from({length:100},(_,j)=>{const k=j+1;return[String(k),nm(k),"","","",drawN(k)]});
+const C=[["#e53935","أَحْمَر","تُفّاحَة","🍎","1f34e"],["#1e88e5","أَزْرَق","مَوْجَة","🌊","1f30a"],["#fdd835","أَصْفَر","لَيْمون","🍋","1f34b"],["#43a047","أَخْضَر","ضِفْدَع","🐸","1f438"],["#fb8c00","بُرْتُقالِيّ","ثَعْلَب","🦊","1f98a"],["#8e24aa","بَنَفْسَجِيّ","عِنَب","🍇","1f347"],["#f06292","وَرْدِيّ","زَهْرَة","🌷","1f337"],["#6d4c41","بُنِّيّ","دُبّ","🐻","1f43b"],["#212121","أَسْوَد","خُفّاش","🦇","1f987"],["#ffffff","أَبْيَض","غَيْمَة","☁️","2601_fe0f"]]
+  .map(x=>[`<span class="dot" style="background:${x[0]}"></span>`,...x.slice(1)]);
+const SETS={h:{L:H,n:"حرف",all:"كل الحروف",unit:"حرفاً",pic:"بأيّ حرف تبدأ؟"},n:{L:N,n:"رقم",all:"كل الأرقام",unit:"رقماً",pic:"كم عددها؟"},c:{L:C,n:"لون",all:"كل الألوان",unit:"لوناً",pic:"ما لونه؟"}};
+let SK="h";
+const key=i=>SK+i;
+const art=x=>x[5]?x[5]:x[4]?`<img src="anim/${x[4]}.webp" alt="${x[2]}" style="width:1.6em;height:1.6em;vertical-align:middle" onerror="this.outerHTML='${x[3]}'">`:x[3];
+const $=s=>document.querySelector(s);
+let st={stars:0,done:[]};
+try{st=JSON.parse(localStorage.getItem("hurufi"))||st}catch(e){}
+st.done=st.done.map(d=>typeof d==="number"?"h"+d:d); // نسخة قديمة كانت تحفظ أرقاماً
+const doneN=()=>st.done.filter(d=>d[0]===SK).length;
+const save=()=>{try{localStorage.setItem("hurufi",JSON.stringify(st))}catch(e){}$("#stars").textContent="⭐ "+st.stars;
+  $("#fill").style.width=doneN()/L.length*100+"%";$("#prog").textContent=doneN()+" / "+L.length+" "+SETS[SK].unit};
+const party=()=>{const p=$("#party");for(let k=0;k<14;k++){const s=document.createElement("span");s.textContent=["⭐","🎉","🌟","🎈"][k%4];s.style.left=Math.random()*95+"%";s.style.top="-40px";s.style.animationDelay=Math.random()*.3+"s";p.appendChild(s);setTimeout(()=>s.remove(),1600)}};
+const win=(i)=>{st.stars++;const neu=!st.done.includes(key(i));if(neu)st.done.push(key(i));save();party();if(neu&&doneN()===L.length)setTimeout(()=>say("مبروك! أكملت "+SETS[SK].all),800)};
+let voice=null;
+const pickVoice=()=>{voice=speechSynthesis.getVoices().find(v=>v.lang.startsWith("ar"))||null};
+if("speechSynthesis"in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+setTimeout(()=>{if(!voice)$("#novoice").classList.remove("hid")},1500);
+// شكل الحرف في أوّل الكلمة ووسطها وآخرها (ـ تطويل). الحروف التي لا تتّصل بما بعدها: ا د ذ ر ز و
+const NOJOIN="ادذرزو";
+const forms=c=>NOJOIN.includes(c)?[c,"ـ"+c,"ـ"+c]:[c+"ـ","ـ"+c+"ـ","ـ"+c];
+// صوت مسجَّل طبيعي من audio/ (يولّده make_audio.py)، وصوت الجهاز احتياطاً فقط
+const fnv=s=>{let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return h.toString(16).padStart(8,"0")};
+let snd=null;
+const say=t=>{if(snd)snd.pause();if("speechSynthesis"in window)speechSynthesis.cancel();
+  snd=new Audio("audio/"+fnv(t)+".mp3");snd.play().catch(()=>tts(t))};
+// ما يُقال عند فتح البطاقة / عند نجاح لعبة الصور
+const line=x=>SK==="n"?x[1]:x[1]+"، "+x[2];
+const okLine=x=>SK==="n"?x[1]:x[2]+"، "+x[1];
+function allPhrases(){const S=new Set(["ممتاز","أحسنت","حاول مرّة أخرى"]),k0=SK;for(const k of["h","n","c"]){SK=k;L=SETS[k].L;S.add("مبروك! أكملت "+SETS[k].all);S.add(SETS[k].pic);L.forEach((x,i)=>{ans=i;S.add(line(x));S.add(okLine(x));S.add(q());if(k!=="n")S.add(x[2])})}SK=k0;L=SETS[k0].L;return[...S]}
+const tts=t=>{if(!("speechSynthesis"in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="ar-SA";if(voice)u.voice=voice;u.rate=.8;speechSynthesis.speak(u)};
+
+// تعلّم
+let cur=0;
+function grid(){
+  $("#learn").innerHTML='<div class="grid'+(SK==="n"?" g10":"")+'">'+L.map((x,i)=>`<button class="${st.done.includes(key(i))?"done":""}" data-i="${i}">${x[0]}</button>`).join("")+"</div>";
+  $("#learn").querySelectorAll("button").forEach(b=>b.onclick=()=>card(+b.dataset.i));
+}
+function card(i){
+  cur=i;const x=L[i];
+  $("#learn").innerHTML=`<div class="big"><div class="nav2"><button class="arr" id="pv">→</button><div class="l">${x[0]}</div><button class="arr" id="nx">←</button></div><div class="w">${x[1]}</div>
+  ${SK==="h"?`<div class="forms">${forms(x[0]).map((f,k)=>`<div><b>${f}</b><small>${["أوّل","وسط","آخر"][k]}</small></div>`).join("")}</div>`:""}<div class="e">${art(x)}</div><div class="w">${SK==="n"?"":x[2]}</div>
+  <div class="row"><button class="btn" id="s">🔊</button>${SK!=="c"?'<button class="btn g" id="t">اكتبه ✍️</button>':""}<button class="btn o" id="b">${SETS[SK].all}</button></div></div>`;  $("#s").onclick=()=>say(line(x));if($("#t"))$("#t").onclick=()=>go("trace");$("#b").onclick=grid;
+  const e=$("#learn .e");e.onclick=()=>{e.classList.remove("spin");void e.offsetWidth;e.classList.add("spin");say(SK==="n"?x[1]:x[2])};
+  e.onanimationend=ev=>{if(ev.animationName==="spin")e.classList.remove("spin")};
+  $("#nx").onclick=()=>card((i+1)%L.length);$("#pv").onclick=()=>card((i+L.length-1)%L.length);say(line(x));
+}
+
+// اكتب
+const cv=$("#cv"),cx=cv.getContext("2d"),ink=document.createElement("canvas");ink.width=ink.height=600;const ix=ink.getContext("2d");
+const font=()=>{const n=L[cur][0].length;return'bold '+(n>2?250:n>1?340:420)+'px "Segoe UI",Tahoma,sans-serif'};
+function guide(){cx.clearRect(0,0,600,600);cx.font=font();cx.textAlign="center";cx.textBaseline="middle";cx.fillStyle="#eee3d3";cx.fillText(L[cur][0],300,320);cx.drawImage(ink,0,0)}
+function newTrace(){ix.clearRect(0,0,600,600);$("#msg").textContent="اكتب "+SETS[SK].n+" "+L[cur][1];guide()}
+let drawing=false,last=null;
+const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*600/r.width,(e.clientY-r.top)*600/r.height]};
+cv.onpointerdown=e=>{drawing=true;last=pt(e);cv.setPointerCapture(e.pointerId)};
+cv.onpointermove=e=>{if(!drawing)return;const p=pt(e);ix.strokeStyle="#3db5ff";ix.lineWidth=34;ix.lineCap=ix.lineJoin="round";ix.beginPath();ix.moveTo(...last);ix.lineTo(...p);ix.stroke();last=p;guide()};
+cv.onpointerup=cv.onpointercancel=()=>drawing=false;
+function score(){
+  // ponytail: pixel-overlap score, good enough for kids; stroke order not checked
+  const m=document.createElement("canvas");m.width=m.height=600;const mx=m.getContext("2d");
+  mx.font=font();mx.textAlign="center";mx.textBaseline="middle";mx.fillText(L[cur][0],300,320);
+  const a=mx.getImageData(0,0,600,600).data,b=ix.getImageData(0,0,600,600).data;let gl=0,hit=0,ink_=0,out=0;
+  for(let i=3;i<a.length;i+=16){const g=a[i]>100,d=b[i]>100;if(g){gl++;if(d)hit++}if(d){ink_++;if(!g)out++}}
+  return{cover:hit/gl,out:ink_?out/ink_:1};
+}
+$("#clr").onclick=newTrace;
+$("#nxt").onclick=()=>{cur=(cur+1)%L.length;newTrace()};
+$("#chk").onclick=()=>{const s=score();
+  if(s.cover>.4&&s.out<.6){win(cur);$("#msg").textContent="ممتاز! ⭐";say("ممتاز")}
+  else $("#msg").textContent=s.cover<=.4?"أكمل الحرف 💪":"حاول داخل الحرف 🙂"};
+
+// العب
+// خيارات مضلِّلة: في الأرقام أرقام قريبة (±10) ليبقى السؤال معقولاً
+const pick4=a=>{const s=new Set([a]),r=()=>SK==="n"?Math.min(L.length-1,Math.max(0,a+Math.round((Math.random()-.5)*20))):Math.floor(Math.random()*L.length);while(s.size<4)s.add(r());return s};
+let ans=0;
+function quiz(){
+  ans=Math.floor(Math.random()*L.length);const s=pick4(ans);
+  const o=[...s].sort(()=>Math.random()-.5);$("#qmsg").textContent=q();
+  $("#opts").innerHTML=o.map(i=>`<button data-i="${i}">${L[i][0]}</button>`).join("");
+  $("#opts").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    if(+b.dataset.i===ans){b.className="ok";win(ans);say("أحسنت");setTimeout(quiz,900)}else{b.className="no";say("حاول مرّة أخرى")}});
+  say(q());
+}
+const q=()=>(SK==="c"?"أين اللون ":"أين "+SETS[SK].n+" ")+L[ans][1]+"؟";
+$("#rep").onclick=()=>say(q());
+
+// الصور: يرى صورة ويختار الحرف الذي تبدأ به الكلمة
+let pa=0;
+function pic(){
+  pa=Math.floor(Math.random()*L.length);const s=pick4(pa);
+  $("#pe").innerHTML=art(L[pa]);
+  $("#popts").innerHTML=[...s].sort(()=>Math.random()-.5).map(i=>`<button data-i="${i}">${L[i][0]}</button>`).join("");
+  $("#popts").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    if(+b.dataset.i===pa){b.className="ok";win(pa);say(okLine(L[pa]));setTimeout(pic,1400)}else{b.className="no";say("حاول مرّة أخرى")}});
+  $("#ptitle").textContent=SETS[SK].pic;say(SK==="h"?L[pa][2]:SETS[SK].pic);
+}
+$("#pe").onclick=()=>say(SK==="h"?L[pa][2]:SETS[SK].pic);
+
+function go(m){
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));
+  ["learn","trace","quiz","pic"].forEach(s=>$("#"+s).classList.toggle("hid",s!==m));
+  if(m==="learn")grid();if(m==="trace")newTrace();if(m==="quiz")quiz();if(m==="pic")pic();
+}
+function topic(k){
+  SK=k;L=SETS[k].L;cur=0;
+  document.querySelectorAll("#topics button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+  $('nav [data-m="trace"]').classList.toggle("hid",k==="c");
+  save();go("learn");
+}
+document.querySelectorAll("#topics button").forEach(b=>b.onclick=()=>topic(b.dataset.k));
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.m));
+save();grid();
+// رابط مباشر لشاشة: #h0 (بطاقة) · #quiz-n · #pic-c · #trace-h1 — يُستخدم لصور المتجر
+{const m=location.hash.match(/^#(?:(learn|quiz|pic|trace)-)?([hnc])(\d*)$/);if(m){topic(m[2]);cur=+m[3]||0;if(!m[1]||m[1]==="learn"){if(m[3])card(cur)}else go(m[1])}}
+// تطبيق هاتف يعمل بلا إنترنت (لا يعمل حين يُفتح الملف مباشرة file://، وهذا طبيعي)
+if("serviceWorker"in navigator&&location.protocol.startsWith("http")&&!location.hash)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
