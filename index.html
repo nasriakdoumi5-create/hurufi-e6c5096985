@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
+<script>window.DEMO={"n": 5, "t": "نسخة تجريبيّة — النسخة الكاملة (28 حرفاً · 100 رقم · 10 ألوان) على Etsy ←", "u": "https://www.etsy.com/listing/4622612230"}</script>
 <meta name="description" content="Hurufi: Arabic alphabet app for kids. 28 Arabic letters with audio, letter tracing, numbers 1-100 and colors. Works on phone and PC, offline.">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>حروفي</title>
@@ -127,6 +128,9 @@ const C=[["#e53935","أَحْمَر","تُفّاحَة","🍎","1f34e"],["#1e88e
   .map(x=>[`<span class="dot" style="background:${x[0]}"></span>`,...x.slice(1)]);
 const SETS={h:{L:H,n:"حرف",all:"كل الحروف",unit:"حرفاً",pic:"بأيّ حرف تبدأ؟"},n:{L:N,n:"رقم",all:"كل الأرقام",unit:"رقماً",pic:"كم عددها؟"},c:{L:C,n:"لون",all:"كل الألوان",unit:"لوناً",pic:"ما لونه؟"}};
 let SK="h";
+// demo site: window.DEMO={n,t,u} is injected only into the public page; the paid copies never have it
+if(window.DEMO){for(const k in SETS)SETS[k].L=SETS[k].L.slice(0,DEMO.n);L=SETS.h.L;
+  document.querySelector("#bar").insertAdjacentHTML("beforebegin",'<a href="'+DEMO.u+'" style="display:block;max-width:528px;margin:0 auto 6px;padding:10px;background:#3b2a1a;color:#fff;border-radius:10px;text-align:center;font-weight:700;text-decoration:none">'+DEMO.t+'</a>')}
 const key=i=>SK+i;
 const art=x=>x[5]?x[5]:x[4]?`<img src="anim/${x[4]}.webp" alt="${x[2]}" style="width:1.6em;height:1.6em;vertical-align:middle" onerror="this.outerHTML='${x[3]}'">`:x[3];
 const $=s=>document.querySelector(s);
