@@ -1,0 +1,1 @@
+{"name": "ABC Kids", "short_name": "ABC Kids", "lang": "en", "start_url": "./index.html", "display": "standalone", "background_color": "#fff8ec", "theme_color": "#ff8a3d", "icons": [{"src": "icon192.png", "sizes": "192x192", "type": "image/png"}, {"src": "icon512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]}

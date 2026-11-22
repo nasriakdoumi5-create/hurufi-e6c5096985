@@ -1,0 +1,261 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon192.png"><link rel="apple-touch-icon" href="icon192.png">
+<meta name="theme-color" content="#ff8a3d"><meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{--bg:#fff8ec;--ink:#3b2a1a;--a:#ff8a3d;--b:#3db5ff;--g:#4cc46b;--card:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,sans-serif;touch-action:manipulation}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--a);color:#fff}
+header h1{margin:0;font-size:24px}
+#stars{font-size:22px;font-weight:700}
+nav{display:flex;gap:8px;padding:10px 16px;justify-content:center}
+nav button{flex:1;max-width:160px;padding:12px;font-size:18px;border:0;border-radius:14px;background:#ffe2c8;color:var(--ink);font-weight:700}
+nav button.on{background:var(--b);color:#fff}
+main{max-width:560px;margin:0 auto;padding:8px 16px 40px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.grid button{aspect-ratio:1;font-size:40px;border:0;border-radius:16px;background:var(--card);box-shadow:0 3px 0 #e8d3b8;color:var(--ink)}
+.grid button.done{background:#dff5e4}
+.big{text-align:center}
+.big .l{font-size:140px;line-height:1.1}
+.big .w{font-size:30px;margin:6px 0}
+.big .e{font-size:70px}
+.row{display:flex;gap:10px;justify-content:center;margin:14px 0;flex-wrap:wrap}
+.btn{padding:14px 20px;font-size:20px;border:0;border-radius:14px;background:var(--b);color:#fff;font-weight:700}
+.btn.g{background:var(--g)}.btn.o{background:var(--a)}
+canvas{width:100%;aspect-ratio:1;background:#fff;border-radius:20px;box-shadow:0 3px 0 #e8d3b8;touch-action:none;display:block}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.opts button{font-size:70px;padding:10px;border:0;border-radius:18px;background:var(--card);box-shadow:0 3px 0 #e8d3b8;color:var(--ink)}
+.opts button.ok{background:#bdf0c9}.opts button.no{background:#ffc9c9}
+#msg{text-align:center;font-size:26px;min-height:36px;font-weight:700}
+.hid{display:none!important}
+#bar{position:relative;max-width:528px;margin:0 auto 6px;height:22px;background:#ffe2c8;border-radius:11px;overflow:hidden}
+#fill{height:100%;background:var(--g);width:0;transition:width .4s}
+#prog{position:absolute;inset:0;text-align:center;font-size:14px;font-weight:700;line-height:22px}
+#novoice{max-width:528px;margin:0 auto 6px;padding:8px;background:#ffe9a8;border-radius:10px;text-align:center;font-size:15px}
+.forms{display:flex;justify-content:center;gap:10px;margin:8px 0}
+.forms div{background:#fff;border-radius:12px;padding:4px 12px;box-shadow:0 2px 0 #e8d3b8;text-align:center}
+.forms b{display:block;font-size:44px;font-weight:400}.forms small{font-size:13px}
+.nav2{display:flex;align-items:center;justify-content:space-between}
+.arr{width:84px;height:84px;border:0;border-radius:50%;background:var(--a);color:#fff;font-size:48px;font-weight:700;box-shadow:0 4px 0 #d96a1f;animation:pulse 1.4s infinite}
+#pv{background:#ffe2c8;color:var(--ink);box-shadow:0 4px 0 #e8d3b8;animation:none}
+@keyframes pulse{50%{transform:scale(1.1)}}
+.big .e,.pic{display:inline-block;cursor:pointer}
+.big .e:not(:has(img)),.pic:not(:has(img)){animation:hop 1.6s ease-in-out infinite}
+.pic{display:block}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-18px) rotate(-8deg)}50%{transform:translateY(0) rotate(0)}75%{transform:translateY(-8px) rotate(8deg)}}
+.spin{animation:spin .7s ease-out!important}
+@keyframes spin{0%{transform:scale(1)}40%{transform:scale(1.5) rotate(20deg)}100%{transform:scale(1) rotate(360deg)}}
+.big .l{animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+#topics{display:flex;gap:8px;padding:10px 16px 0;justify-content:center}
+#topics button{flex:1;max-width:160px;padding:10px;font-size:20px;border:0;border-radius:14px;background:#fff;box-shadow:0 3px 0 #e8d3b8;font-weight:700;color:var(--ink)}
+nav button,#topics button{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:480px){nav,#topics{gap:6px;padding-left:10px;padding-right:10px}nav button,#topics button{font-size:15px;padding:10px 4px}
+  .btn{padding:12px 14px;font-size:17px}.arr{width:64px;height:64px;font-size:36px}main{padding-left:10px;padding-right:10px}}
+#topics button.on{background:var(--a);color:#fff;box-shadow:0 3px 0 #d96a1f}
+.dot{display:inline-block;width:.9em;height:.9em;border-radius:50%;border:3px solid #0002;vertical-align:middle}
+.cnt{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:330px;margin:0 auto}
+.cnt{flex-direction:column;align-items:center}.cnt img{width:48px;height:48px}
+.tens{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:330px}.ten{display:grid;grid-template-columns:repeat(5,12px);gap:3px;padding:4px;background:#ffe2c8;border-radius:6px}.ten i{width:12px;height:12px;border-radius:50%;background:#e53935}
+.ones{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;margin-top:6px}
+.grid.g10{grid-template-columns:repeat(10,1fr);gap:4px}.grid.g10 button{font-size:16px;border-radius:8px}
+.pic{font-size:120px;text-align:center}
+#party{position:fixed;inset:0;pointer-events:none;font-size:40px}
+#party span{position:absolute;animation:fall 1.2s ease-in forwards}
+@keyframes fall{to{transform:translateY(100vh) rotate(360deg);opacity:0}}
+</style>
+<script src="lang.js"></script><script src="core.js"></script>
+<script>
+// any unexpected error must not stop the game; warn if opened from inside a zip
+window.addEventListener("error",e=>{console.warn(e.message);e.preventDefault&&e.preventDefault()});
+window.addEventListener("unhandledrejection",e=>e.preventDefault());
+if(location.protocol==="file:"&&/\/Temp\/|\.zip/i.test(decodeURI(location.href)))
+  document.addEventListener("DOMContentLoaded",()=>document.body.insertAdjacentHTML("afterbegin",'<div style="background:#c62828;color:#fff;padding:14px;text-align:center;font-size:18px;font-weight:700">'+LG.zip+'</div>'));
+document.documentElement.lang=LG.lang;document.documentElement.dir=LG.dir;document.title=LG.title;
+</script>
+</head>
+<body>
+<header><h1 id="ttl"></h1><div id="stars">⭐ 0</div></header>
+<div id="topics"><button data-k="h" class="on"></button><button data-k="n"></button><button data-k="c"></button></div>
+<nav><button data-m="learn" class="on"></button><button data-m="trace"></button><button data-m="quiz"></button><button data-m="pic"></button></nav>
+<div id="bar"><div id="fill"></div><span id="prog"></span></div>
+<div id="novoice" class="hid"></div>
+<main>
+<section id="learn"></section>
+<section id="trace" class="hid">
+  <div id="msg"></div>
+  <canvas id="cv" width="600" height="600"></canvas>
+  <div class="row"><button class="btn o" id="clr"></button><button class="btn g" id="chk"></button><button class="btn" id="nxt"></button></div>
+</section>
+<section id="quiz" class="hid">
+  <div id="qmsg" style="text-align:center;font-size:24px;font-weight:700"></div>
+  <div class="row"><button class="btn" id="rep"></button></div>
+  <div class="opts" id="opts"></div>
+</section>
+<section id="pic" class="hid">
+  <div id="ptitle" style="text-align:center;font-size:24px;font-weight:700"></div>
+  <div class="pic" id="pe"></div>
+  <div class="opts" id="popts"></div>
+</section>
+<div id="party"></div>
+<p style="text-align:center;font-size:11px;opacity:.5">Animated emoji: Google Noto Emoji, CC BY 4.0</p>
+</main>
+<script>
+const SETS=CORE.SETS;let L=SETS.h.L;
+document.querySelector("#ttl").textContent=LG.title;if(LG.family){const b=document.createElement("button");b.textContent=" ✏️";b.style.cssText="background:none;border:0;font-size:.8em;cursor:pointer";
+  b.onclick=()=>{const n=prompt("✏️",FAM.name||(()=>{try{return localStorage.getItem("kid_name")}catch(e){}})()||LG.kid);if(!n||!n.trim())return;famSet("name",n.trim());if(n.trim()!==LG.kid&&confirm("🎤 "+LG.bravo+" "+n.trim()+"?"))famRec("v:praise",b)};document.querySelector("#ttl").appendChild(b)}
+// one app, several languages: 🌐 goes back to the language picker (../index.html)
+if(LG.multi){const g=document.createElement("a");g.href="../index.html";g.textContent=" 🌐";g.style.cssText="text-decoration:none;font-size:.8em";document.querySelector("#ttl").appendChild(g)}document.querySelector("#novoice").textContent=LG.noVoice;
+document.querySelectorAll("#topics button").forEach((b,i)=>b.textContent=LG.topics[i]);
+document.querySelectorAll("nav button").forEach((b,i)=>b.textContent=LG.nav[i]);
+[["#clr","clear"],["#chk","check"],["#nxt","nextBtn"],["#rep","listen"]].forEach(([s,k])=>document.querySelector(s).textContent=LG[k]);
+let SK="h";
+// demo site: window.DEMO={n,t,u} is injected only into the public page; the paid copies never have it
+if(window.DEMO){for(const k in SETS)SETS[k].L=SETS[k].L.slice(0,DEMO.n);L=SETS.h.L;
+  document.querySelector("#bar").insertAdjacentHTML("beforebegin",'<a href="'+DEMO.u+'" style="display:block;max-width:528px;margin:0 auto 6px;padding:10px;background:#3b2a1a;color:#fff;border-radius:10px;text-align:center;font-weight:700;text-decoration:none">'+DEMO.t+'</a>')}
+const key=i=>SK+i;
+const art=x=>{const f=FAM["p:"+x[0]];return f?`<img src="${f.u||(f.u=URL.createObjectURL(f.img))}" alt="" style="width:1.6em;height:1.6em;object-fit:cover;border-radius:30%;vertical-align:middle">`:art0(x)};
+const art0=x=>x[5]?x[5]:x[4]?`<img src="anim/${x[4]}.webp" alt="${x[2]}" style="width:1.6em;height:1.6em;vertical-align:middle" onerror="this.outerHTML='${x[3]}'">`:x[3];
+const $=s=>document.querySelector(s);
+let st={stars:0,done:[]};
+try{st=JSON.parse(localStorage.getItem(LG.store))||st}catch(e){}
+st.done=st.done.map(d=>typeof d==="number"?"h"+d:d);
+const doneN=()=>st.done.filter(d=>d[0]===SK).length;
+const save=()=>{try{localStorage.setItem(LG.store,JSON.stringify(st))}catch(e){}$("#stars").textContent="⭐ "+st.stars;
+  $("#fill").style.width=doneN()/L.length*100+"%";$("#prog").textContent=doneN()+" / "+L.length+" "+SETS[SK].unit};
+const party=()=>{const p=$("#party");for(let k=0;k<14;k++){const s=document.createElement("span");s.textContent=["⭐","🎉","🌟","🎈"][k%4];s.style.left=Math.random()*95+"%";s.style.top="-40px";s.style.animationDelay=Math.random()*.3+"s";p.appendChild(s);setTimeout(()=>s.remove(),1600)}};
+const win=(i)=>{st.stars++;const neu=!st.done.includes(key(i));if(neu)st.done.push(key(i));save();party();if(neu&&doneN()===L.length)setTimeout(()=>say(LG.congrats+SETS[SK].all),800)};
+let voice=null;
+// same speaker as the recorded audio when the device has it (Edge: "Microsoft Elvira Online (Natural)"), else any voice of the language
+const pickVoice=()=>{const V=speechSynthesis.getVoices().filter(v=>v.lang.startsWith(LG.lang)),nm=LG.voice.split("-")[2].replace("Neural","");
+  voice=V.find(v=>v.name.includes(nm))||V.find(v=>/natural|online/i.test(v.name))||V[0]||null};
+if("speechSynthesis"in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+const fnv=s=>{let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return h.toString(16).padStart(8,"0")};
+let snd=null;
+// family mode (personalised copies, LG.family): parents add their own photos and record their own voice per card; kept only on this device (IndexedDB)
+const FAM={};let fdb=null;
+const famName=n=>{LG.title=LG.base.title+(n?" · "+n:"");document.title=LG.title;$("#ttl").firstChild.textContent=LG.title;
+  for(const k of ["great","bravo","congrats"])LG[k]=n?n+(LG.sep||", ")+LG.base[k]:LG.base[k]};  // a new name has no recorded audio -> say() reads it with the device voice
+const famSet=(k,v)=>{FAM[k]=v;if(k==="name"){famName(v);try{localStorage.setItem("kid_name",v)}catch(e){}}
+  const w=k[0]==="w"?v:k[0]==="p"&&!FAM["w"+k.slice(1)]?v.w:null;if(w!=null)for(const S of Object.values(SETS))S.L.forEach(x=>{if(":"+x[0]===k.slice(1))x[2]=w});if(fdb)fdb.transaction("f","readwrite").objectStore("f").put(v,k)};
+// child's name is shared by every language of the app (same origin); instant-download copies (LG.kid "") ask for it on first open
+if(LG.family){let n=null;try{n=localStorage.getItem("kid_name")}catch(e){}
+  if(n!=null)famName(n);else if(!LG.kid)setTimeout(()=>{const v=prompt("👶 ✏️");if(v&&v.trim())famSet("name",v.trim())},700)}
+if(LG.family&&window.indexedDB){const r=indexedDB.open(LG.store+"_fam",1);r.onupgradeneeded=()=>r.result.createObjectStore("f");
+  r.onsuccess=()=>{fdb=r.result;const c=fdb.transaction("f").objectStore("f").openCursor();c.onsuccess=()=>{const k=c.result;if(k){famSet(k.key,k.value);k.continue()}}}}
+// audio ships as base64 .txt and plays from memory: download managers (IDM...) hijack any audio/mpeg response, even fetch()
+const AB={},getA=src=>AB[src]||(AB[src]=fetch(src.replace(/\.mp3$/,".txt")).then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>URL.createObjectURL(new Blob([Uint8Array.from(atob(t),c=>c.charCodeAt(0))],{type:"audio/mpeg"}))).catch(e=>{delete AB[src];throw e}));
+let sayN=0;
+const PRAISE=()=>[LG.great,LG.bravo,LG.congrats+SETS[SK].all];
+const say=(t,x)=>{const n=++sayN;if(snd)snd.pause();if("speechSynthesis"in window)speechSynthesis.cancel();
+  const v=x&&FAM["v:"+SK+x[0]]||(FAM["v:praise"]&&PRAISE().includes(t)?FAM["v:praise"]:null);
+  const play=u=>{if(n!==sayN)return;snd=new Audio(u);return snd.play()};
+  (v?Promise.resolve(v.u||(v.u=URL.createObjectURL(v))):getA("audio/"+fnv(t)+".mp3")).then(play)
+   .catch(()=>{if(n!==sayN)return;tts(t)})};  // edited word / new name without recorded audio: device voice reads it (closest to the app voice)  // family copies: one voice only, never the browser's robot voice
+// record ≤6 s of the parent's voice into FAM[key]; mic blocked -> phone recorder / audio file
+let rec=null;
+const famRec=async(key,B,done)=>{if(rec){rec.stop();return}const lbl=B.textContent;
+  const keep=b=>{famSet(key,b);B.textContent="✅";setTimeout(()=>B.textContent=lbl,1500);done&&done()};
+  const fa=document.createElement("input");fa.type="file";fa.accept="audio/*";fa.setAttribute("capture","");fa.onchange=()=>{const f=fa.files[0];fa.value="";if(f)keep(f)};
+  if(!navigator.mediaDevices||!window.MediaRecorder)return fa.click();
+  B.textContent="⏳";sayN++;if(snd)snd.pause();if("speechSynthesis"in window)speechSynthesis.cancel();
+  try{const m=await Promise.race([navigator.mediaDevices.getUserMedia({audio:true}),new Promise((_,no)=>setTimeout(()=>no({name:"Timeout"}),10000))]),ch=[];
+    rec=new MediaRecorder(m);rec.ondataavailable=e=>ch.push(e.data);
+    rec.onstop=()=>{m.getTracks().forEach(t=>t.stop());const b=new Blob(ch,{type:rec.mimeType});rec=null;b.size>1000?keep(b):(B.textContent=lbl)};
+    rec.start();B.textContent="🔴 ⏹️";setTimeout(()=>rec&&rec.stop(),6000)}
+  catch(e){B.textContent="🎤 ✗ "+e.name;setTimeout(()=>{B.textContent=lbl;fa.click()},1500)}};
+const aud=src=>getA(src).catch(()=>{});  // preload only
+const tts=t=>{if(!("speechSynthesis"in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=LG.ttsLang;if(voice)u.voice=voice;u.rate=.8;speechSynthesis.speak(u)};
+let cur=0;
+function grid(){
+  $("#learn").innerHTML='<div class="grid'+(SK==="n"?" g10":"")+'">'+L.map((x,i)=>`<button class="${st.done.includes(key(i))?"done":""}" data-i="${i}">${x[0]}</button>`).join("")+"</div>";
+  $("#learn").querySelectorAll("button").forEach(b=>b.onclick=()=>card(+b.dataset.i));
+}
+function card(i){
+  cur=i;const x=L[i];
+  $("#learn").innerHTML=`<div class="big"><div class="nav2"><button class="arr" id="pv">${LG.prev}</button><div class="l">${x[0]}</div><button class="arr" id="nx">${LG.next}</button></div><div class="w">${x[1]}</div>
+  ${SK==="h"?`<div class="forms">${LG.forms(x[0]).map((f,k)=>`<div><b>${f}</b><small>${LG.formLabels[k]}</small></div>`).join("")}</div>`:""}<div class="e">${art(x)}</div><div class="w">${SK==="n"?"":x[2]}${LG.family&&SK!=="n"?'<button id="fw" style="background:none;border:0;font-size:.7em;cursor:pointer"> ✏️</button>':""}</div>
+  <div class="row"><button class="btn" id="s">🔊</button>${SK!=="c"?'<button class="btn g" id="t">'+LG.writeIt+'</button>':""}<button class="btn o" id="b">${SETS[SK].all}</button></div>${LG.family&&SK!=="n"?'<div class="row"><button class="btn" id="fp" style="background:#fff;color:#3b2a1a;border:3px dashed #ff8a3d">'+LG.famPhoto+'</button><button class="btn" id="fr" style="background:#fff;color:#3b2a1a;border:3px dashed #3db5ff">'+LG.famVoice+'</button></div><input type="file" accept="image/*" id="fi" hidden>':""}</div>`;
+  const pulse=el=>el&&el.animate([{transform:"scale(1)"},{transform:"scale(1.25)"},{transform:"scale(1)"}],{duration:500,iterations:3});
+  const photo=then=>{const fi=$("#fi");fi.onchange=()=>{const f=fi.files[0];fi.value="";if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=512;const w=Math.min(im.width,im.height);
+      c.getContext("2d").drawImage(im,(im.width-w)/2,(im.height-w)/2,w,w,0,0,512,512);
+      c.toBlob(b=>{famSet("p:"+x[0],{img:b,w:x[2]});card(i);then&&then()},"image/jpeg",.85)};im.src=URL.createObjectURL(f)};fi.click()};
+  if($("#fw"))$("#fw").onclick=()=>{const w=prompt("✏️",x[2]);if(!w||!w.trim())return;famSet("w:"+x[0],w.trim());card(i);photo(()=>pulse($("#fr")));pulse($("#fr"))};
+  if($("#fp")){$("#fp").onclick=()=>photo(()=>pulse($("#fr")));
+    $("#fr").onclick=()=>famRec("v:"+SK+x[0],$("#fr"),()=>say(CORE.line(SK,x),x))}
+  $("#s").onclick=()=>say(CORE.line(SK,x),x);if($("#t"))$("#t").onclick=()=>go("trace");$("#b").onclick=grid;
+  const e=$("#learn .e");e.onclick=()=>{e.classList.remove("spin");void e.offsetWidth;e.classList.add("spin");say(SK==="n"?x[1]:x[2],x)};
+  e.onanimationend=ev=>{if(ev.animationName==="spin")e.classList.remove("spin")};
+  $("#nx").onclick=()=>card((i+1)%L.length);$("#pv").onclick=()=>card((i+L.length-1)%L.length);say(CORE.line(SK,x),x);
+  [x[2],x[1],CORE.okLine(SK,x)].forEach(t=>aud("audio/"+fnv(t)+".mp3"));
+}
+const cv=$("#cv"),cx=cv.getContext("2d"),ink=document.createElement("canvas");ink.width=ink.height=600;const ix=ink.getContext("2d");
+const font=()=>{const n=L[cur][0].length;return'bold '+(n>2?250:n>1?340:420)+'px "Segoe UI",Tahoma,sans-serif'};
+function guide(){cx.clearRect(0,0,600,600);cx.font=font();cx.textAlign="center";cx.textBaseline="middle";cx.fillStyle="#eee3d3";cx.fillText(L[cur][0],300,320);cx.drawImage(ink,0,0)}
+function newTrace(){ix.clearRect(0,0,600,600);$("#msg").textContent=LG.write+SETS[SK].n+" "+L[cur][1];guide()}
+let drawing=false,last=null;
+const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*600/r.width,(e.clientY-r.top)*600/r.height]};
+cv.onpointerdown=e=>{drawing=true;last=pt(e);cv.setPointerCapture(e.pointerId)};
+cv.onpointermove=e=>{if(!drawing)return;const p=pt(e);ix.strokeStyle="#3db5ff";ix.lineWidth=34;ix.lineCap=ix.lineJoin="round";ix.beginPath();ix.moveTo(...last);ix.lineTo(...p);ix.stroke();last=p;guide()};
+cv.onpointerup=cv.onpointercancel=()=>drawing=false;
+function score(){
+  // ponytail: pixel-overlap score, good enough for kids; stroke order not checked
+  const m=document.createElement("canvas");m.width=m.height=600;const mx=m.getContext("2d");
+  mx.font=font();mx.textAlign="center";mx.textBaseline="middle";mx.fillText(L[cur][0],300,320);
+  const a=mx.getImageData(0,0,600,600).data,b=ix.getImageData(0,0,600,600).data;let gl=0,hit=0,ink_=0,out=0;
+  for(let i=3;i<a.length;i+=16){const g=a[i]>100,d=b[i]>100;if(g){gl++;if(d)hit++}if(d){ink_++;if(!g)out++}}
+  return{cover:hit/gl,out:ink_?out/ink_:1};
+}
+$("#clr").onclick=newTrace;
+$("#nxt").onclick=()=>{cur=(cur+1)%L.length;newTrace()};
+$("#chk").onclick=()=>{const s=score();
+  if(s.cover>.4&&s.out<.6){win(cur);$("#msg").textContent=LG.greatMsg;say(LG.great)}
+  else $("#msg").textContent=s.cover<=.4?LG.moreMsg:LG.insideMsg};
+const pick4=a=>{const s=new Set([a]),r=()=>SK==="n"?Math.min(L.length-1,Math.max(0,a+Math.round((Math.random()-.5)*20))):Math.floor(Math.random()*L.length);while(s.size<4)s.add(r());return s};
+// no repeats: every item comes once (shuffled) before any comes again
+const BAG={},nxt=t=>{const k=t+SK;if(!BAG[k]||!BAG[k].length)BAG[k]=[...L.keys()].sort(()=>Math.random()-.5);return BAG[k].pop()};
+let ans=0;
+function quiz(){
+  ans=nxt("q");const s=pick4(ans);
+  const o=[...s].sort(()=>Math.random()-.5);$("#qmsg").textContent=q();
+  $("#opts").innerHTML=o.map(i=>`<button data-i="${i}">${L[i][0]}</button>`).join("");
+  $("#opts").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    if(+b.dataset.i===ans){b.className="ok";win(ans);say(LG.bravo);setTimeout(quiz,900)}else{b.className="no";say(LG.retry)}});
+  say(q());
+}
+const q=()=>CORE.q(SK,ans);
+$("#rep").onclick=()=>say(q());
+let pa=0;
+function pic(){
+  pa=nxt("p");const s=pick4(pa);
+  $("#pe").innerHTML=art(L[pa]);
+  $("#popts").innerHTML=[...s].sort(()=>Math.random()-.5).map(i=>`<button data-i="${i}">${L[i][0]}</button>`).join("");
+  $("#popts").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    if(+b.dataset.i===pa){b.className="ok";win(pa);say(CORE.okLine(SK,L[pa]),L[pa]);setTimeout(pic,1400)}else{b.className="no";say(LG.retry)}});
+  $("#ptitle").textContent=SETS[SK].pic;say(SK==="h"?L[pa][2]:SETS[SK].pic,SK==="h"?L[pa]:null);
+}
+$("#pe").onclick=()=>say(SK==="h"?L[pa][2]:SETS[SK].pic,SK==="h"?L[pa]:null);
+
+function go(m){
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));
+  ["learn","trace","quiz","pic"].forEach(s=>$("#"+s).classList.toggle("hid",s!==m));
+  if(m==="learn")grid();if(m==="trace")newTrace();if(m==="quiz")quiz();if(m==="pic")pic();
+}
+function topic(k){
+  SK=k;L=SETS[k].L;cur=0;
+  document.querySelectorAll("#topics button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+  $('nav [data-m="trace"]').classList.toggle("hid",k==="c");
+  save();go("learn");
+}
+document.querySelectorAll("#topics button").forEach(b=>b.onclick=()=>topic(b.dataset.k));
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.m));
+save();grid();
+{const m=location.hash.match(/^#(?:(learn|quiz|pic|trace)-)?([hnc])(\d*)$/);if(m){topic(m[2]);cur=+m[3]||0;if(!m[1]||m[1]==="learn"){if(m[3])card(cur)}else go(m[1])}}
+if("serviceWorker"in navigator&&location.protocol.startsWith("http")&&!location.hash)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
